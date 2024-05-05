@@ -3,21 +3,22 @@ import Layout from "./Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../features/authslice";
-import FormAddAffec from "../components/FormAddAffec";
+// import FormAddAffec from "../components/FormAddAffec";
 import axios from "axios";
+import FormAddRec from "../components/FormAddRec";
 
-const AddAff = () => {
+const AddRecup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isLoading, isError, user } = useSelector((state) => state.auth);
-  const [grater, setGrater] = useState([]);
+  const [lower, setLower] = useState([]);
 
   useEffect(() => {
     dispatch(getMe());
   }, [dispatch]);
 
   useEffect(() => {
-    getGrater();
+    getLower();
   }, [user]);
 
   useEffect(() => {
@@ -29,14 +30,14 @@ const AddAff = () => {
     }
   }, [isError, user, navigate]);
 
-  const getGrater = async () => {
+  const getLower = async () => {
     if (user) {
-      const response = await axios.get("http://localhost:5000/users/greater", {
+      const response = await axios.get("http://localhost:5000/users/lower", {
         params: {
           number: user.number,
         },
       });
-      setGrater(response.data);
+      setLower(response.data);
     }
   };
   return (
@@ -44,10 +45,10 @@ const AddAff = () => {
       {isLoading ? (
         <p>Loading ...</p>
       ) : user && Object.keys(user).length !== 0 ? (
-        <FormAddAffec graters={grater} sender={user} />
+        <FormAddRec lowers={lower} sender={user} />
       ) : null}
     </Layout>
   );
 };
 
-export default AddAff;
+export default AddRecup;

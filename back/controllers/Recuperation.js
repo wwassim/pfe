@@ -1,6 +1,6 @@
 const Affectation = require("../models/Affectation");
 const simController = require("../controllers/Sim.js");
-const userController = require("../controllers/Users.js");
+const Sim = require("../models/Sim.js");
 const User = require("../models/User.js");
 
 exports.getRecuperation = async (req, res) => {
@@ -35,18 +35,56 @@ exports.getRecuperation = async (req, res) => {
 };
 
 exports.addRecuperation = async (req, res) => {
-  const { sender, receiver, quantite } = req.body;
-
+  const { sender, receiver, quantite, firstIccid, lastIccid } = req.body;
   try {
-    const affectation = await Affectation.create({
+    const currentUser = await User.findById(sender).populate("role");
+    const receiverUser = await User.findById(receiver).populate("role");
+
+    const firstSim = await Sim.findOne({ simUser: sender, iccid: firstIccid });
+    const lastSim = await Sim.findOne({ simUser: sender, iccid: lastIccid });
+
+    // check the quantity to be sent
+    if (quantite > currentUser.stock) {
+      return res
+        .status(401)
+        .json({ msg: "Cannot send due to insufficient stock." });
+    }
+
+    // Check if the user sim equivalent to the current user or not
+    if (!firstSim) {
+      return res
+        .status(401)
+        .json({ msg: "The First ICCID is not equivalent to the current user" });
+    }
+
+    if (!lastSim) {
+      return res
+        .status(401)
+        .json({ msg: "The Last ICCID is not equivalent to the current user" });
+    }
+
+    const createSims = await simController.updateSim(
+      firstIccid,
+      lastIccid,
+      receiver
+    );
+    currentUser.stock -= quantite;
+    receiverUser.stock += quantite;
+
+    await currentUser.save();
+    await receiverUser.save();
+
+    const recuperation = await Affectation.create({
       sender: sender,
       receiver: receiver,
       quantite: quantite,
     });
-    // await simController.createSim(quantite);
-    await userController.checkUser(sender, receiver, quantite);
-    res.status(201).json(affectation);
+
+    res.status(201).json(recuperation);
   } catch (error) {
-    res.status(400).json({ msg: error.message });
+    console.error(error);
+    res.status(500).json({
+      errorMessage: "An error occurred while processing the request.",
+    });
   }
 };

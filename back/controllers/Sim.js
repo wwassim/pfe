@@ -1,6 +1,6 @@
 const Sim = require("../models/Sim.js");
 
-exports.createSim = async (firstIccid, lastIccid, receiver, res) => {
+exports.createSim = async (firstIccid, lastIccid, receivers) => {
   try {
     const firstSim = await Sim.findOne({ iccid: firstIccid });
 
@@ -29,6 +29,7 @@ exports.createSim = async (firstIccid, lastIccid, receiver, res) => {
         simUser: receiver,
       });
     }
+    return {};
   } catch (error) {
     console.error("Error creating Sims:", error);
     throw error;

@@ -16,10 +16,22 @@ const Affectation = () => {
 
   useEffect(() => {
     dispatch(getMe());
-    getAffectations();
-  }, [dispatch, affectations]);
+  }, [dispatch]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (user) {
+      getAffectations();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (isError) {
+      navigate("/");
+    }
+    if (user && user.role.name === "Point de vente") {
+      navigate("/dashboard");
+    }
+  }, [isError, user, navigate]);
 
   const getAffectations = async () => {
     try {
@@ -35,9 +47,14 @@ const Affectation = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <Layout>
-      {isLoading ? "is loading" : <SimList affectations={affectations} />}
+      {isLoading ? (
+        "is loading"
+      ) : (
+        <SimList affectations={affectations} user={user} />
+      )}
     </Layout>
   );
 };

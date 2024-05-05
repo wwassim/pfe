@@ -7,7 +7,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
+
   const logout = () => {
     dispatch(LogOut());
     dispatch(reset());
@@ -37,11 +37,13 @@ const Sidebar = () => {
                   <IoPricetag /> Affectation sim
                 </NavLink>
               </li>
-              <li>
-                <NavLink to={"/recuperation"}>
-                  <IoPerson /> Recuperation sim
-                </NavLink>
-              </li>
+              {user && user.role.name !== "admin" && (
+                <li>
+                  <NavLink to={"/recuperation"}>
+                    <IoPerson /> Recuperation sim
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
         )}

@@ -1,6 +1,5 @@
 const Affectation = require("../models/Affectation");
 const simController = require("../controllers/Sim.js");
-const userController = require("../controllers/Users.js");
 const Sim = require("../models/Sim.js");
 const User = require("../models/User.js");
 
@@ -36,7 +35,6 @@ exports.getAffectation = async (req, res) => {
 
 exports.addAffectation = async (req, res) => {
   const { sender, receiver, quantite, firstIccid, lastIccid } = req.body;
-
   try {
     const currentUser = await User.findById(sender).populate("role");
     const receiverUser = await User.findById(receiver).populate("role");
@@ -44,24 +42,25 @@ exports.addAffectation = async (req, res) => {
     const firstSim = await Sim.findOne({ simUser: sender, iccid: firstIccid });
     const lastSim = await Sim.findOne({ simUser: sender, iccid: lastIccid });
 
-    // if (!currentUser || !receiverUser || !firstSim || !lastSim) {
-    //   return res
-    //     .status(401)
-    //     .json({ msg: "Invalid sender, receiver, or ICCID range." });
-    // }
-
     if (currentUser.role.name === "admin") {
       const createSims = await simController.createSim(
         firstIccid,
         lastIccid,
         receiver
       );
+      if (createSims.msg) {
+        return res.status(400).json({ msg: createSims.msg });
+      }
 
       const affectation = await Affectation.create({
         sender: sender,
         receiver: receiver,
         quantite: quantite,
       });
+
+      receiverUser.stock += quantite;
+
+      await receiverUser.save();
 
       return res.status(201).json(affectation);
     }

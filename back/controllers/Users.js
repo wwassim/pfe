@@ -80,8 +80,9 @@ exports.getGreater = async (req, res) => {
 
 exports.getLower = async (req, res) => {
   const { number } = req.query;
+  const targetNumber = parseInt(number) - 1;
   try {
-    const users = await User.find({ number: { $lt: number } });
+    const users = await User.find({ number: targetNumber });
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json(error);

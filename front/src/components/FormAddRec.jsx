@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-const FormAddAffec = ({ graters, sender }) => {
+const FormAddRec = ({ lowers, sender }) => {
   const schema = yup.object().shape({
     firstIccid: yup
       .string()
@@ -42,7 +42,7 @@ const FormAddAffec = ({ graters, sender }) => {
     try {
       data.sender = sender._id;
       data.quantite = parseInt(data.lastIccid) - parseInt(data.firstIccid) + 1;
-      await axios.post("http://localhost:5000/affectation", data);
+      await axios.post("http://localhost:5000/recuperation", data);
       navigate("/affectation");
     } catch (error) {
       if (error.response) {
@@ -53,7 +53,7 @@ const FormAddAffec = ({ graters, sender }) => {
   return (
     <div>
       <h1 className="title">Sim</h1>
-      <h2 className="subtitle">Affect a New Sim</h2>
+      <h2 className="subtitle">Recuperation a New Sim</h2>
       <div className="card is-shadowless">
         <div className="card-content">
           <div className="content">
@@ -102,10 +102,10 @@ const FormAddAffec = ({ graters, sender }) => {
                   <div className="select is-fullwidth">
                     <select {...register("receiver")}>
                       <option value="">Select a user</option>
-                      {graters &&
-                        graters.map((grater) => (
-                          <option key={grater._id} value={grater._id}>
-                            {grater.name}
+                      {lowers &&
+                        lowers.map((lower) => (
+                          <option key={lower._id} value={lower._id}>
+                            {lower.name}
                           </option>
                         ))}
                     </select>
@@ -128,4 +128,4 @@ const FormAddAffec = ({ graters, sender }) => {
   );
 };
 
-export default FormAddAffec;
+export default FormAddRec;
