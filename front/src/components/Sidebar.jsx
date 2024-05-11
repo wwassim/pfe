@@ -44,6 +44,18 @@ const Sidebar = () => {
                   </NavLink>
                 </li>
               )}
+              {user && user.role.name === "admin" && (
+                <div>
+                  <p className="menu-label">Admin</p>
+                  <ul className="menu-list">
+                    <li>
+                      <NavLink to={"/users"}>
+                        <IoPerson /> Users
+                      </NavLink>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </ul>
           </div>
         )}

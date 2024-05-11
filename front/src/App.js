@@ -5,6 +5,9 @@ import Affectation from "./pages/Affectation";
 import Recuperation from "./pages/Recuperation";
 import AddAff from "./pages/AddAffe";
 import AddRecup from "./pages/AddRecup";
+import Users from "./pages/Users";
+import AddUser from "./pages/AddUser";
+import EditUser from "./pages/EditUser";
 
 function App() {
   return (
@@ -17,6 +20,9 @@ function App() {
           <Route path="/affectation/add" element={<AddAff />} />
           <Route path="/recuperation" element={<Recuperation />} />
           <Route path="/recuperation/add" element={<AddRecup />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/add" element={<AddUser />} />
+          <Route path="/users/edit/:id" element={<EditUser />} />
         </Routes>
       </BrowserRouter>
     </div>

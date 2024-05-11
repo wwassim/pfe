@@ -23,13 +23,12 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, password, role } = req.body;
   const urole = await Role.findById(role);
   const hashPassword = await argon2.hash(password);
   try {
     await User.create({
       name: name,
-      email: email,
       password: hashPassword,
       role: role,
       number: urole.number,

@@ -35,15 +35,16 @@ exports.verifyUser = async (req, res, next) => {
 exports.adminOnly = async (req, res, next) => {
   try {
     // Find the user by _id stored in the session
-    const user = await User.findOne({ _id: req.session.userId });
-
+    const user = await User.findOne({ _id: req.session.userId }).populate(
+      "role"
+    );
     // If user not found
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
 
     // Check if the user is an admin
-    if (user.role !== "magasinier") {
+    if (user.role.name !== "admin") {
       return res.status(403).json({ msg: "Access forbidden" });
     }
 

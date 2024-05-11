@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { LoginUser, reset, getMe } from "../features/authslice";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Login = () => {
 
   const Auth = (e) => {
     e.preventDefault();
-    dispatch(LoginUser({ email, password }));
+    dispatch(LoginUser({ name, password }));
   };
   return (
     <section className="hero is-fullheight is-fullwidth">
@@ -36,14 +36,14 @@ const Login = () => {
                 {isError && <p className="has-text-centered">{message}</p>}
                 <h1 className="title is-2">Sign In</h1>
                 <div className="field">
-                  <label className="label">Email</label>
+                  <label className="label">UserName</label>
                   <div className="control">
                     <input
                       type="text"
                       className="input"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Email"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="UserName"
                     />
                   </div>
                 </div>

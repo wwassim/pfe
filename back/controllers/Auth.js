@@ -3,7 +3,7 @@ const argon2 = require("argon2");
 
 exports.Login = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ name: req.body.name });
     if (!user) {
       return res.status(401).json({ msg: "Wrong credentials." });
     }
@@ -13,9 +13,8 @@ exports.Login = async (req, res) => {
     req.session.userId = user._id;
     const _id = user._id;
     const name = user.name;
-    const email = user.email;
     const role = user.role;
-    res.status(200).json({ _id, name, email, role });
+    res.status(200).json({ _id, name, role });
   } catch (err) {
     // Handle the error
     console.error(err);

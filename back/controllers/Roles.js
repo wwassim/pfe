@@ -1,29 +1,11 @@
-// controllers/RoleController.js
-const Role = require("../models/Role.js");
+const Role = require("../models/Role");
 
-async function seedRoles() {
+//get all users
+exports.getAllRoles = async (req, res) => {
   try {
-    const existingRoles = await Role.find();
-    if (existingRoles.length === 0) {
-      const rolesData = [
-        { name: "admin", number: 0 },
-        { name: "magasinier", number: 1 },
-        { name: "commercial", number: 2 },
-        { name: "franchis", number: 3 },
-        { name: "Sous-franchis", number: 4 },
-        { name: "Point de vente", number: 5 },
-        // Add other roles as needed
-      ];
-      await Role.insertMany(rolesData);
-      console.log("Roles seeded successfully.");
-    } else {
-      console.log("Roles already exist. Skipping seeding.");
-    }
+    const roles = await Role.find();
+    res.status(200).json(roles);
   } catch (error) {
-    console.error("Error seeding roles:", error);
+    res.status(500).json(error);
   }
-}
-
-module.exports = {
-  seedRoles,
 };

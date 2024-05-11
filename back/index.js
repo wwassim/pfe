@@ -9,7 +9,9 @@ const UserRoute = require("./routes/UserRoute.js");
 const AuthRoute = require("./routes/AuthRoute.js");
 const AffectationRoute = require("./routes/AffectationRoute.js");
 const RecuperationRoute = require("./routes/RecuperationRoute.js");
-const { seedRoles } = require("./controllers/Roles.js");
+const RoleRoute = require("./routes/RoleRoute.js");
+
+const { seedRoles } = require("./middleware/seedRoles.js");
 
 dotenv.config();
 
@@ -61,6 +63,7 @@ app.use(UserRoute);
 app.use(AuthRoute);
 app.use(AffectationRoute);
 app.use(RecuperationRoute);
+app.use(RoleRoute);
 
 // Other middleware and routes...
 
