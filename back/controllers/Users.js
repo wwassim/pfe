@@ -39,6 +39,55 @@ exports.createUser = async (req, res) => {
   }
 };
 
+// Update User Info
+export const updateUser = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) return res.status(404).json({ msg: "User not found" });
+  const { name, password, confPassword, role } = req.body;
+  const urole = await Role.findById(role);
+  let hashPassword;
+
+  if (password === "" || password === null) {
+    hashPassword = user.password;
+  } else {
+    hashPassword = await argon2.hash(password);
+  }
+  if (password !== confPassword)
+    return res
+      .status(400)
+      .json({ msg: "The password and Confirm Password do not match" });
+  try {
+    await User.update(
+      {
+        name: name,
+        password: hashPassword,
+        role: role,
+        number: urole.number,
+      },
+      {
+        where: {
+          _id: user._id,
+        },
+      }
+    );
+    res.status(200).json({ msg: "User Updated" });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};
+// Delete User
+export const deleteUser = async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) return res.status(404).json({ msg: "User not found" });
+  try {
+    await User.deleteOne({ _id: user._id });
+    res.status(200).json({ msg: "User Deleted" });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};
+
 exports.checkUser = async (sender, receiver, quantite) => {
   try {
     const senderU = await User.findById(sender).populate("role");
