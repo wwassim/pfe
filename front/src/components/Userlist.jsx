@@ -22,6 +22,24 @@ const Userlist = () => {
       console.error("Error fetching users:", error);
     }
   };
+
+  const deleteUser = async (userId) => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
+    if (isConfirmed) {
+      try {
+        await axios.delete(`http://localhost:5000/users/${userId}`);
+        getUsers(); // Refresh the user list after deletion
+        window.alert("User deleted successfully.");
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        window.alert("Failed to delete user. Please try again.");
+      }
+    } else {
+      window.alert("User deletion canceled.");
+    }
+  };
   return (
     <div className="p-4">
       <h1 className="title">Users</h1>
@@ -46,16 +64,20 @@ const Userlist = () => {
               <td>{user.role.name}</td>
               <td>
                 <Link
-                  to={`/users/edit/1`}
+                  to={`/users/edit/${user._id}`}
                   className="button is-normal is-info mr-2"
                 >
                   Edit
                 </Link>
-                <button className="button is-normal is-danger">Delete</button>
+                <button
+                  onClick={() => deleteUser(user._id)}
+                  className="button is-normal is-danger"
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
-          {/* onClick={() => deleteUser(user.uuid)} */}
         </tbody>
       </table>
     </div>

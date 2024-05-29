@@ -1,50 +1,83 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const FormEditUser = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confPassword, setConfPassword] = useState("");
-  const [role, setRole] = useState("");
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
+  const [roles, setRoles] = useState([]);
   const { id } = useParams();
 
-  //   useEffect(() => {
-  //     const getUserById = async () => {
-  //       try {
-  //         const response = await axios.get(`http://localhost:5000/users/${id}`);
-  //         setName(response.data.name);
-  //         setEmail(response.data.email);
-  //         setRole(response.data.role);
-  //       } catch (error) {
-  //         if (error.response) {
-  //           setMsg(error.response.data.msg);
-  //         }
-  //       }
-  //     };
-  //     getUserById();
-  //   }, [id]);
+  // Define Yup schema for validation
+  const schema = yup.object().shape({
+    name: yup.string().required("Name is required"),
 
-  //   const updateUser = async (e) => {
-  //     e.preventDefault();
-  //     try {
-  //       await axios.patch(`http://localhost:5000/users/${id}`, {
-  //         name: name,
-  //         email: email,
-  //         password: password,
-  //         confPassword: confPassword,
-  //         role: role,
-  //       });
-  //       navigate("/users");
-  //     } catch (error) {
-  //       if (error.response) {
-  //         setMsg(error.response.data.msg);
-  //       }
-  //     }
-  //   };
+    password: yup
+      .string()
+      .test(
+        "password",
+        "Password must be at least 6 characters",
+        (value) => !value || value.length >= 6
+      ),
+    role: yup.string().required("Role is required"),
+  });
+
+  // Configure react-hook-form
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  useEffect(() => {
+    getRoles();
+  }, []);
+
+  const getRoles = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/role");
+      setRoles(response.data);
+    } catch (error) {
+      console.error("Error fetching roles:", error);
+    }
+  };
+
+  // Fetch user data and populate form fields
+  useEffect(() => {
+    const getUserById = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/users/${id}`);
+        console.log(response.data);
+        const { name, role } = response.data;
+        setValue("name", name);
+        setValue("role", role);
+      } catch (error) {
+        if (error.response) {
+          setMsg(error.response.data.msg);
+        }
+      }
+    };
+    getUserById();
+  }, [id, setValue]);
+
+  // Handle form submission
+  const onSubmit = async (data) => {
+    try {
+      await axios.patch(`http://localhost:5000/users/${id}`, data);
+      navigate("/users");
+    } catch (error) {
+      if (error.response) {
+        setMsg(error.response.data.msg);
+      }
+    }
+  };
+
   return (
     <div>
       <h1 className="title">Users</h1>
@@ -52,68 +85,41 @@ const FormEditUser = () => {
       <div className="card is-shadowless">
         <div className="card-content">
           <div className="content">
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <p className="has-text-centered">{msg}</p>
               <div className="field">
                 <label className="label">Name</label>
                 <div className="control">
-                  <input
-                    type="text"
-                    className="input"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Name"
-                  />
+                  <input type="text" className="input" {...register("name")} />
+                  <p className="help is-danger">{errors.name?.message}</p>
                 </div>
               </div>
+
               <div className="field">
-                <label className="label">Email</label>
-                <div className="control">
-                  <input
-                    type="text"
-                    className="input"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                  />
-                </div>
-              </div>
-              <div className="field">
-                <label className="label">Password</label>
+                <label className="label">New Password</label>
                 <div className="control">
                   <input
                     type="password"
+                    placeholder="The current password remains active until you update it."
                     className="input"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="******"
+                    {...register("password")}
                   />
-                </div>
-              </div>
-              <div className="field">
-                <label className="label">Confirm Password</label>
-                <div className="control">
-                  <input
-                    type="password"
-                    className="input"
-                    value={confPassword}
-                    onChange={(e) => setConfPassword(e.target.value)}
-                    placeholder="******"
-                  />
+                  <p className="help is-danger">{errors.password?.message}</p>
                 </div>
               </div>
               <div className="field">
                 <label className="label">Role</label>
                 <div className="control">
                   <div className="select is-fullwidth">
-                    <select
-                      value={role}
-                      onChange={(e) => setRole(e.target.value)}
-                    >
-                      <option value="admin">Admin</option>
-                      <option value="user">User</option>
+                    <select {...register("role")}>
+                      {roles.map((role) => (
+                        <option key={role._id} value={role._id}>
+                          {role.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
+                  <p className="help is-danger">{errors.role?.message}</p>
                 </div>
               </div>
               <div className="field">

@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
 import Pagination from "./Pagination";
 
-const SimList = ({ affectations, user }) => {
+const SimList = ({ affectations }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7; // Number of items to display per page
-  const location = useLocation();
-
-  const { pathname } = location;
 
   // Change page
   const handlePageChange = (page) => {
@@ -19,24 +15,7 @@ const SimList = ({ affectations, user }) => {
   const currentItems = affectations.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="p-4">
-      <h1 className="title">Sim</h1>
-      <h2 className="subtitle">List of Sim</h2>
-
-      <div className="is-flex is-justify-content-space-between is-align-items-center mb-2">
-        <Link to={`${pathname}/add`} className="button is-primary">
-          Add New
-        </Link>
-        {user && (
-          <p
-            className={`is-size-5 ${
-              user.stock <= 0 ? "has-text-danger" : "has-text-success"
-            }`}
-          >
-            Stock: {user.stock}
-          </p>
-        )}
-      </div>
+    <div className="">
       {!affectations ? (
         <div>Loading...</div>
       ) : (

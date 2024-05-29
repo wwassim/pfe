@@ -1,6 +1,6 @@
 const Sim = require("../models/Sim.js");
 
-exports.createSim = async (firstIccid, lastIccid, receivers) => {
+exports.createSim = async (firstIccid, lastIccid, receiver) => {
   try {
     const firstSim = await Sim.findOne({ iccid: firstIccid });
 
@@ -15,7 +15,6 @@ exports.createSim = async (firstIccid, lastIccid, receivers) => {
       const msg =
         "This Sim already exists in the database but the last iccid : " +
         maxNum.iccid;
-      console.log(msg);
       return { msg };
     }
 

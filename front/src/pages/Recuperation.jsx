@@ -5,11 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../features/authslice";
 import axios from "axios";
+import { Link, useLocation } from "react-router-dom";
 
 const Recuperation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
+  const { pathname } = location;
   const { isError, user } = useSelector((state) => state.auth);
   const [recuperation, setRecuperation] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -49,9 +52,29 @@ const Recuperation = () => {
   };
   return (
     <Layout>
-      {isLoading
-        ? "is loading"
-        : user && <SimList affectations={recuperation} user={user} />}
+      {isLoading ? (
+        "is loading"
+      ) : (
+        <div className="p-4">
+          <h1 className="title">Sim</h1>
+          <h2 className="subtitle">List of Recuperation</h2>
+          <div className="is-flex is-justify-content-space-between is-align-items-center mb-2">
+            <Link to={`${pathname}/add`} className="button is-primary">
+              Add New
+            </Link>
+            {user && (
+              <p
+                className={`is-size-5 ${
+                  user.stock <= 0 ? "has-text-danger" : "has-text-success"
+                }`}
+              >
+                Stock: {user.stock}
+              </p>
+            )}
+          </div>
+          <SimList affectations={recuperation} />
+        </div>
+      )}
     </Layout>
   );
 };

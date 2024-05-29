@@ -1,7 +1,6 @@
 const User = require("../models/User.js");
 
 exports.verifyUser = async (req, res, next) => {
-  console.log(req.session);
   try {
     // Check if userId is stored in the session
 

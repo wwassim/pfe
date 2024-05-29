@@ -1,4 +1,9 @@
+import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Chart, registerables } from "chart.js";
+import "chartjs-adapter-date-fns";
+import "react-datepicker/dist/react-datepicker.css";
+
 import Dashboard from "./pages/Dashboard";
 import Login from "./components/Login";
 import Affectation from "./pages/Affectation";
@@ -8,6 +13,8 @@ import AddRecup from "./pages/AddRecup";
 import Users from "./pages/Users";
 import AddUser from "./pages/AddUser";
 import EditUser from "./pages/EditUser";
+
+Chart.register(...registerables);
 
 function App() {
   return (

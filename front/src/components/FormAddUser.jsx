@@ -29,34 +29,15 @@ const FormAddUser = () => {
     resolver: yupResolver(schema),
   });
 
-  //   const saveUser = async (e) => {
-  //     e.preventDefault();
-  //     try {
-  //       await axios.post("http://localhost:5000/users", {
-  //         name: name,
-  //         email: email,
-  //         password: password,
-  //         confPassword: confPassword,
-  //         role: role,
-  //       });
-  //       navigate("/users");
-  //     } catch (error) {
-  //       if (error.response) {
-  //         setMsg(error.response.data.msg);
-  //       }
-  //     }
-  //   };
-
   useEffect(() => {
     getRoles();
   }, []);
 
   const getRoles = async () => {
-    // if (user) {
     const response = await axios.get("http://localhost:5000/role");
     setRoles(response.data);
-    // }
   };
+
   const onSubmit = async (data) => {
     try {
       await axios.post("http://localhost:5000/users", data);
@@ -66,7 +47,6 @@ const FormAddUser = () => {
         setMsg(error.response.data.msg);
       }
     }
-    console.log(data);
   };
 
   return (

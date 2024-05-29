@@ -4,17 +4,14 @@ const Sim = require("../models/Sim.js");
 const User = require("../models/User.js");
 
 exports.getRecuperation = async (req, res) => {
-  const { senderId } = req.query;
-
   try {
-    const sender = await User.findOne({
-      _id: senderId,
-    });
+    const sender = await User.findById(req.params.id);
+
     if (!sender) {
       return res.status(404).json({ msg: "Sender not found" });
     }
 
-    const affectation = await Affectation.find({ sender: senderId })
+    const affectation = await Affectation.find({ sender: sender._id })
       .populate("sender")
       .populate("receiver");
 

@@ -3,17 +3,30 @@ const simController = require("../controllers/Sim.js");
 const Sim = require("../models/Sim.js");
 const User = require("../models/User.js");
 
-exports.getAffectation = async (req, res) => {
-  const { senderId } = req.query;
+exports.getAllAffectation = async (req, res) => {
   try {
-    const sender = await User.findOne({
-      _id: senderId,
-    });
+    const affectation = await Affectation.find()
+      .populate("sender")
+      .populate("receiver");
+
+    if (!affectation) {
+      return res.status(404).json({ msg: "No affectation found " });
+    }
+
+    res.status(200).json(affectation);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getAffectation = async (req, res) => {
+  try {
+    const sender = await User.findById(req.params.id);
     if (!sender) {
       return res.status(404).json({ msg: "Sender not found" });
     }
 
-    const affectation = await Affectation.find({ sender: senderId })
+    const affectation = await Affectation.find({ sender: sender._id })
       .populate("sender")
       .populate("receiver");
 
