@@ -9,7 +9,7 @@ const UsersDash = ({ user }) => {
   const [userId, setUserId] = useState();
   const [affectation, setAffectations] = useState();
   const [recuperation, setRecuperation] = useState();
-
+  const [selectedUser, setSelectedUser] = useState(user);
   useEffect(() => {
     if (user) {
       setUserId(user._id); // Set the current user's ID
@@ -18,6 +18,10 @@ const UsersDash = ({ user }) => {
       getRecuperation(user._id); // Fetch recuperation for current user
     }
   }, [user]);
+
+  useEffect(() => {
+    getUser();
+  }, [userId]);
 
   useEffect(() => {
     if (userId) {
@@ -44,7 +48,17 @@ const UsersDash = ({ user }) => {
       }
     }
   };
-
+  // api get user
+  const getUser = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/users/${userId}`);
+      setSelectedUser(response.data);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    } finally {
+      //   setIsLoading(false);
+    }
+  };
   // API get affectation for a specific user
   const getAffectations = async (id) => {
     try {
@@ -101,10 +115,10 @@ const UsersDash = ({ user }) => {
       </div>
       <div class="field has-addons box is-flex is-justify-content-space-between is-align-items-center">
         <strong>Stock user: </strong>
-        {user && (
-          <p className="is-size-5 has-text-success">
+        {selectedUser && (
+          <p className="is-size-5 has-text-success has-text-weight-bold	">
             {" "}
-            <strong> {user.stock} </strong>
+            {user.stock}
           </p>
         )}
       </div>

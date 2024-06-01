@@ -104,7 +104,12 @@ const Dash = () => {
       </div>
       <div class="field has-addons box is-flex is-justify-content-space-between is-align-items-center">
         <strong>Stock user: </strong>
-        {user && <p className="is-size-5 has-text-success"> {user.stock}</p>}
+        {user && (
+          <p className="is-size-5 has-text-success has-text-weight-bold	">
+            {" "}
+            {user.stock}
+          </p>
+        )}
       </div>
 
       {/* Details Section */}
