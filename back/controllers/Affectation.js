@@ -29,18 +29,17 @@ exports.getAffectation = async (req, res) => {
     const affectation = await Affectation.find({ sender: sender._id })
       .populate("sender")
       .populate("receiver");
-
     if (!affectation) {
       return res
         .status(404)
         .json({ msg: "No affectation found for the given sender ID." });
     }
 
-    const filteredAffectation = affectation.filter(
-      (a) => a.receiver.number > sender.number
+    const filteredAffectations = affectation.filter(
+      (a) => a.receiver && a.receiver.number > sender.number
     );
 
-    res.status(200).json(filteredAffectation);
+    res.status(200).json(filteredAffectations);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

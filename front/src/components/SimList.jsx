@@ -35,8 +35,8 @@ const SimList = ({ affectations }) => {
                 <tr key={index}>
                   <td>{indexOfFirstItem + index + 1}</td>
                   <td>{new Date(affectation.createdAt).toLocaleString()}</td>
-                  <td>{affectation.sender.name}</td>
-                  <td>{affectation.receiver.name}</td>
+                  <td>{affectation?.sender?.name}</td>
+                  <td>{affectation?.receiver?.name}</td>
                   <td>{affectation.quantite}</td>
                 </tr>
               ))}

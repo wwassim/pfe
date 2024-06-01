@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import Affectation from "../pages/Affectation";
-import AdminDash from "./AdminDash";
 import axios from "axios";
 import SimList from "./SimList";
 import ChartRec from "./ChartRec";
@@ -8,6 +6,7 @@ import ChartAffect from "./ChartAffect";
 
 const Dash = () => {
   const [users, setUsers] = useState();
+  const [user, setUser] = useState();
   const [userId, setUserId] = useState();
   const [affectation, setAffectations] = useState();
   const [recuperation, setRecuperation] = useState();
@@ -19,6 +18,7 @@ const Dash = () => {
     if (userId) {
       getAffectations();
       getRecuperation();
+      getUser();
     }
   }, [userId]);
 
@@ -33,6 +33,18 @@ const Dash = () => {
       //   setIsLoading(false);
     }
   };
+  // api get user
+  const getUser = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/users/${userId}`);
+      setUser(response.data);
+      console.log(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    } finally {
+      //   setIsLoading(false);
+    }
+  };
 
   // api get affectation for a specific user
   const getAffectations = async () => {
@@ -40,6 +52,7 @@ const Dash = () => {
       const response = await axios.get(
         `http://localhost:5000/affectation/${userId}`
       );
+
       setAffectations(response.data);
     } catch (error) {
       console.error("Error fetching affectations:", error);
@@ -56,7 +69,7 @@ const Dash = () => {
       );
       setRecuperation(response.data);
     } catch (error) {
-      console.error("Error fetching affectations:", error);
+      console.error("Error :", error);
     } finally {
       //   setIsLoading(false);
     }
@@ -89,6 +102,11 @@ const Dash = () => {
           </button>
         </div>
       </div>
+      <div class="field has-addons box is-flex is-justify-content-space-between is-align-items-center">
+        <strong>Stock user: </strong>
+        {user && <p className="is-size-5 has-text-success"> {user.stock}</p>}
+      </div>
+
       {/* Details Section */}
       <div>
         <div className="columns">

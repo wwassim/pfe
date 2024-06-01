@@ -18,6 +18,7 @@ dotenv.config();
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {

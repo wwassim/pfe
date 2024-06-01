@@ -1,21 +1,14 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import SimList from "./SimList";
 import ChartRec from "./ChartRec";
 import ChartAffect from "./ChartAffect";
-// import { getMe } from "../features/authslice";
 
 const UsersDash = ({ user }) => {
-  const dispatch = useDispatch();
   const [users, setUsers] = useState();
   const [userId, setUserId] = useState();
   const [affectation, setAffectations] = useState();
   const [recuperation, setRecuperation] = useState();
-  console.log(userId);
-  //   useEffect(() => {
-  //     dispatch(getMe());
-  //   }, [dispatch]);
 
   useEffect(() => {
     if (user) {
@@ -105,6 +98,15 @@ const UsersDash = ({ user }) => {
             Choose
           </button>
         </div>
+      </div>
+      <div class="field has-addons box is-flex is-justify-content-space-between is-align-items-center">
+        <strong>Stock user: </strong>
+        {user && (
+          <p className="is-size-5 has-text-success">
+            {" "}
+            <strong> {user.stock} </strong>
+          </p>
+        )}
       </div>
       {/* Details Section */}
       <div>

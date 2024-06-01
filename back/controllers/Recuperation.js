@@ -6,26 +6,25 @@ const User = require("../models/User.js");
 exports.getRecuperation = async (req, res) => {
   try {
     const sender = await User.findById(req.params.id);
-
+    // console.log(sender);
     if (!sender) {
       return res.status(404).json({ msg: "Sender not found" });
     }
 
-    const affectation = await Affectation.find({ sender: sender._id })
+    const recuperation = await Affectation.find({ sender: sender._id })
       .populate("sender")
       .populate("receiver");
 
-    if (!affectation) {
+    if (!recuperation) {
       return res
         .status(404)
         .json({ msg: "No affectation found for the given sender ID." });
     }
 
-    const filteredAffectation = affectation.filter(
-      (a) => a.receiver.number < sender.number
+    const filteredRecuperation = recuperation.filter(
+      (a) => a.receiver && a.receiver.number < sender.number
     );
-
-    res.status(200).json(filteredAffectation);
+    res.status(200).json(filteredRecuperation);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
