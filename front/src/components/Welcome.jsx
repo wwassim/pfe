@@ -15,7 +15,7 @@ const Welcome = () => {
           <h2 className="subtitle">
             Welcome Back <strong>{user && user.name}</strong>
           </h2>
-          {user && user.role.name === "admin" && <Dash />}
+          {user && user.role.name === "admin" && <Dash user={user} />}
           {user && user.role.name !== "admin" && <UsersDash user={user} />}
         </div>
       )}

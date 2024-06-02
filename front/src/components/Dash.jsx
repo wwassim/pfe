@@ -4,10 +4,10 @@ import SimList from "./SimList";
 import ChartRec from "./ChartRec";
 import ChartAffect from "./ChartAffect";
 
-const Dash = () => {
+const Dash = ({ user }) => {
   const [users, setUsers] = useState();
-  const [user, setUser] = useState();
-  const [userId, setUserId] = useState();
+  const [userId, setUserId] = useState(user ? user._id : null);
+  const [selectedUser, setSelectedUser] = useState(user);
   const [affectation, setAffectations] = useState();
   const [recuperation, setRecuperation] = useState();
   useEffect(() => {
@@ -37,8 +37,7 @@ const Dash = () => {
   const getUser = async () => {
     try {
       const response = await axios.get(`http://localhost:5000/users/${userId}`);
-      setUser(response.data);
-      console.log(user);
+      setSelectedUser(response.data);
     } catch (error) {
       console.error("Error fetching user:", error);
     } finally {
@@ -104,10 +103,10 @@ const Dash = () => {
       </div>
       <div class="field has-addons box is-flex is-justify-content-space-between is-align-items-center">
         <strong>Stock user: </strong>
-        {user && (
+        {selectedUser && (
           <p className="is-size-5 has-text-success has-text-weight-bold	">
             {" "}
-            {user.stock}
+            {selectedUser.stock}
           </p>
         )}
       </div>

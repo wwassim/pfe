@@ -38,11 +38,9 @@ const Recuperation = () => {
 
   const getRecuperation = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/recuperation", {
-        params: {
-          senderId: user?._id, // Pass sender's ID as a query parameter
-        },
-      });
+      const response = await axios.get(
+        `http://localhost:5000/recuperation/${user?._id}`
+      );
       setRecuperation(response.data);
     } catch (error) {
       console.error("Error fetching affectations:", error);

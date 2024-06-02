@@ -53,6 +53,7 @@ const UsersDash = ({ user }) => {
     try {
       const response = await axios.get(`http://localhost:5000/users/${userId}`);
       setSelectedUser(response.data);
+      console.log(selectedUser);
     } catch (error) {
       console.error("Error fetching user:", error);
     } finally {
@@ -118,7 +119,7 @@ const UsersDash = ({ user }) => {
         {selectedUser && (
           <p className="is-size-5 has-text-success has-text-weight-bold	">
             {" "}
-            {user.stock}
+            {selectedUser.stock}
           </p>
         )}
       </div>
