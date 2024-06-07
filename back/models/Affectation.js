@@ -13,6 +13,8 @@ const AffectationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    firsticcid: { type: String, required: true, default: "0" },
+    lasticcid: { type: String, required: true, default: "0" },
   },
   { timestamps: true }
 );

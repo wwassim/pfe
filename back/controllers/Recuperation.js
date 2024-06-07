@@ -74,6 +74,8 @@ exports.addRecuperation = async (req, res) => {
       sender: sender,
       receiver: receiver,
       quantite: quantite,
+      firsticcid: firstIccid,
+      lasticcid: lastIccid,
     });
 
     res.status(201).json(recuperation);

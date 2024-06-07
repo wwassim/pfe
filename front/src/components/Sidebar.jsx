@@ -28,37 +28,38 @@ const Sidebar = () => {
           </li>
         </ul>
 
-        {user && user.role.name !== "Point de vente" && (
-          <div>
-            <p className="menu-label">Admin</p>
-            <ul className="menu-list">
+        <div>
+          <p className="menu-label">Admin</p>
+          <ul className="menu-list">
+            {user && user.role.name !== "Point de vente" && (
               <li>
                 <NavLink to={"/affectation"}>
                   <IoPricetag /> Affectation sim
                 </NavLink>
               </li>
-              {user && user.role.name !== "admin" && (
-                <li>
-                  <NavLink to={"/recuperation"}>
-                    <IoPerson /> Recuperation sim
-                  </NavLink>
-                </li>
-              )}
-              {user && user.role.name === "admin" && (
-                <div>
-                  <p className="menu-label">Admin</p>
-                  <ul className="menu-list">
-                    <li>
-                      <NavLink to={"/users"}>
-                        <IoPerson /> Users
-                      </NavLink>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </ul>
-          </div>
-        )}
+            )}
+
+            {user && user.role.name !== "admin" && (
+              <li>
+                <NavLink to={"/recuperation"}>
+                  <IoPerson /> Recuperation sim
+                </NavLink>
+              </li>
+            )}
+            {user && user.role.name === "admin" && (
+              <div>
+                <p className="menu-label">Admin</p>
+                <ul className="menu-list">
+                  <li>
+                    <NavLink to={"/users"}>
+                      <IoPerson /> Users
+                    </NavLink>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </ul>
+        </div>
       </aside>
     </div>
   );

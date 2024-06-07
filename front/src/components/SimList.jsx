@@ -28,6 +28,8 @@ const SimList = ({ affectations }) => {
                 <th>Sender</th>
                 <th>Receiver</th>
                 <th>Qte</th>
+                <th>First Iccid</th>
+                <th>Last Iccid</th>
               </tr>
             </thead>
             <tbody>
@@ -38,6 +40,8 @@ const SimList = ({ affectations }) => {
                   <td>{affectation?.sender?.name}</td>
                   <td>{affectation?.receiver?.name}</td>
                   <td>{affectation.quantite}</td>
+                  <td>{affectation.firsticcid}</td>
+                  <td>{affectation.lasticcid}</td>
                 </tr>
               ))}
             </tbody>

@@ -68,6 +68,8 @@ exports.addAffectation = async (req, res) => {
         sender: sender,
         receiver: receiver,
         quantite: quantite,
+        firsticcid: firstIccid,
+        lasticcid: lastIccid,
       });
 
       receiverUser.stock += quantite;
@@ -112,6 +114,8 @@ exports.addAffectation = async (req, res) => {
       sender: sender,
       receiver: receiver,
       quantite: quantite,
+      firsticcid: firstIccid,
+      lasticcid: lastIccid,
     });
 
     res.status(201).json(affectation);
